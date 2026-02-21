@@ -1,8 +1,8 @@
 {
-  "contractAddress": "0x1323f3CfE3c34165562a7B5CC16a867A4bBacA9d",
+  "contractAddress": "0x033480cD0519B7e5b2AAcd64F7B5C018FbeEC20A",
   "deployer": "0x2B650F7565629b54fc476152e4aCbD9C1A4DEF9B",
   "network": "adiTestnet",
   "chainId": "99999",
-  "deployedAt": "2026-02-21T06:42:55.325Z",
-  "blockNumber": 41195
+  "deployedAt": "2026-02-21T13:55:00.000Z",
+  "blockNumber": "latest"
 }

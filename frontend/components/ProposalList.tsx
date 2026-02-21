@@ -67,18 +67,30 @@ export default function ProposalList() {
     try {
       setLoading(true);
       
-      // Load processed files to get proposal IDs
-      const response = await fetch('/api/proposals');
-      if (response.ok) {
-        const data = await response.json();
-        await fetchProposalDetails(data.proposals);
+      // Fetch proposals directly from blockchain events
+      const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_DAO_CHAIN_RPC_URL || 'https://rpc.ab.testnet.adifoundation.ai/');
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+      
+      // Get ProposalCreated events
+      const filter = contract.filters.ProposalCreated();
+      const events = await contract.queryFilter(filter, 0, 'latest');
+      
+      // Extract proposal IDs from events
+      const proposalIds = events.map(event => ({
+        proposalId: event.args?.[0] as string,
+        ipfsCID: undefined // We'll get this from the contract
+      }));
+      
+      console.log(`Found ${proposalIds.length} proposals from blockchain events`);
+      
+      if (proposalIds.length > 0) {
+        await fetchProposalDetails(proposalIds);
       } else {
-        // Fallback: try to load from processed-files.json if API not available
-        console.log('API not available, proposals will be loaded from contract events');
         setProposals([]);
       }
     } catch (error) {
       console.error('Error loading proposals:', error);
+      setProposals([]);
     } finally {
       setLoading(false);
     }

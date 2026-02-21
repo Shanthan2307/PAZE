@@ -95,9 +95,13 @@ function formatProposalDescription(analysisData: IPFSAnalysis, imageCID: string,
     analysisData.metadata.location.country
   ].filter(Boolean).join(", ");
 
+  // Add a unique submission ID to ensure uniqueness
+  const submissionId = `SUB-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+
   return `
 Impact Initiative Proposal
 
+Submission ID: ${submissionId}
 Location: ${location}
 Coordinates: ${analysisData.metadata.location.coordinates.lat}, ${analysisData.metadata.location.coordinates.lng}
 Impact Score: ${analysisData.impactAssessment.score}

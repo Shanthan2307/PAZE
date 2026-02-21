@@ -1,4 +1,4 @@
-export const CONTRACT_ADDRESS = (process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x023d2018C73Fd4BE023cC998e59363A68cDF36eC') as `0x${string}`;
+export const CONTRACT_ADDRESS = (process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x033480cD0519B7e5b2AAcd64F7B5C018FbeEC20A') as `0x${string}`;
 
 // PredictionMarketDAO ABI - Updated for new contract
 export const CONTRACT_ABI = [

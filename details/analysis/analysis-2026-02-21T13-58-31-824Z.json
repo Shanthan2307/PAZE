@@ -1,0 +1,69 @@
+{
+  "metadata": {
+    "timestamp": "2026-02-21T13:58:31.824Z",
+    "location": {
+      "coordinates": {
+        "lat": 39.739200000000004,
+        "lng": -104.9903
+      },
+      "address": "Bannock Central Plaza, Golden Triangle, Denver, Colorado, 80274, United States",
+      "city": "Denver",
+      "state": "Colorado",
+      "country": "United States"
+    },
+    "camera": {
+      "make": "Unknown",
+      "resolution": "Unknown",
+      "settings": {}
+    },
+    "hash": "0xf24d4bdd5d9d59afd9f482842c094cd2a35469d40cb99df309c28b6b4a718052",
+    "image": {
+      "ipfsHash": "bafybeicjfrjzid6gpxhyulyuwesxlpjp6tpmd6b4utdk75wbwicxdtc6wu",
+      "url": "https://gateway.pinata.cloud/ipfs/bafybeicjfrjzid6gpxhyulyuwesxlpjp6tpmd6b4utdk75wbwicxdtc6wu"
+    }
+  },
+  "analysis": {
+    "description": "1) Detailed Description:\nThe image depicts a city street scene. The foreground shows a section of sidewalk made up of large concrete tiles. Some of the tiles appear to be damaged or lifted, creating uneven areas in the walkway. In the background, there is a busy city street with vehicles and pedestrians passing by. The buildings lining the street have a mix of commercial storefronts and residential units, with some colorful signage visible. The overall scene conveys a sense of urban activity and a need for maintenance or repair of the sidewalk infrastructure.\n\n2) List of Objects:\n- Concrete tiles/slabs\n- Vehicles (cars, trucks)\n- Pedestrians\n- Streetlamps\n- Building facades\n- Signage\n\n3) Landmarks:\nThere are no clear landmarks visible in the image. It appears to be a generic city street scene.\n\n4) Categories:\n- Urban environment\n- Infrastructure\n- Transportation\n- Commercial/residential area\n\n5) Tags:\n- Sidewalk\n- City street\n- Damaged tiles\n- Uneven pavement\n- Pedestrians\n- Vehicles\n- Commercial buildings\n- Signage\n\n6) Confidence Score: 90/100",
+    "objects": [],
+    "landmarks": [],
+    "categories": [],
+    "tags": [],
+    "confidence": 85
+  },
+  "context": {
+    "weather": {
+      "temperature": -4.3,
+      "conditions": "Clear sky",
+      "precipitation": 0,
+      "windSpeed": 4.3,
+      "weatherCode": 0
+    },
+    "news": {
+      "relevantArticles": []
+    }
+  },
+  "verification": {
+    "isVerified": false,
+    "method": "Metadata Analysis",
+    "timestamp": "2026-02-21T13:58:31.825Z",
+    "verifier": "TARS Image Verification Service"
+  },
+  "impactAssessment": {
+    "score": 28,
+    "category": "Infrastructure",
+    "urgency": "medium",
+    "estimatedImpact": "To be assessed by DAO members",
+    "recommendedActions": [
+      "Document current conditions",
+      "Engage local stakeholders",
+      "Create DAO proposal for resource allocation",
+      "Monitor progress and impact"
+    ],
+    "stakeholders": [
+      "Local community members",
+      "Environmental agencies",
+      "Local government",
+      "DAO members"
+    ]
+  }
+}

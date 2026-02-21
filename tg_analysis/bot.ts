@@ -41,6 +41,7 @@ export class PazeTelegramBot {
   private token: string;
   private analyzer: PhotoAnalyzer;
   private framePathMap: Map<string, string> = new Map();
+  private proposalDataMap: Map<string, any> = new Map();
 
   constructor(token: string) {
     this.token = token;
@@ -71,7 +72,12 @@ export class PazeTelegramBot {
         '2. 📝 Add a caption describing what to look for\n' +
         '3. 📸 Bot extracts the best frame\n' +
         '4. 🧠 Click "Analyze" to process with AI\n' +
-        '5. ☁️ Get IPFS URLs for DAO proposal\n\n' +
+        '5. ☁️ Get IPFS URLs\n' +
+        '6. 🗳️ Click "Create DAO Proposal"\n\n' +
+        '🔧 Commands:\n' +
+        '/help - Detailed instructions\n' +
+        '/retry - Retry proposal creation\n' +
+        '/status - Check analysis status\n\n' +
         'Example: Send a video with caption:\n' +
         '"Cracked footpath on Main Street"'
       );
@@ -82,26 +88,78 @@ export class PazeTelegramBot {
       const chatId = msg.chat.id;
       this.bot.sendMessage(
         chatId,
-        '📖 How to use Paze:\n\n' +
-        '1. Record a video of the damage\n' +
-        '   ⚠️ Keep it under 20MB (about 1 minute)\n' +
-        '2. Send it to this bot\n' +
-        '3. Add a caption describing what\'s damaged\n' +
-        '   Example: "Broken sidewalk" or "Pothole on 5th Ave"\n\n' +
+        '📖 How to use Paze Bot:\n\n' +
+        '1. Send a video (under 20MB)\n' +
+        '2. Add a caption describing the issue\n' +
+        '3. Wait for frame extraction\n' +
         '4. Bot extracts the frame\n' +
         '5. Click "Analyze" button\n' +
         '6. Get IPFS URLs (30-60 seconds)\n\n' +
         '💡 If video is too large, compress it:\n' +
         'ffmpeg -i input.mp4 -vcodec h264 -crf 28 output.mp4\n\n' +
-        'Commands:\n' +
+        '🔄 Commands:\n' +
         '/start - Start the bot\n' +
         '/help - Show this help message\n' +
+        '/retry - Retry last failed proposal creation\n' +
         '/status - Check bot status'
       );
     });
 
+    // Handle /retry command
+    this.bot.onText(/\/retry/, async (msg) => {
+      const chatId = msg.chat.id;
+      const proposalData = this.proposalDataMap.get(chatId.toString());
+
+      if (!proposalData) {
+        await this.bot.sendMessage(
+          chatId,
+          '❌ No proposal data found.\n\n' +
+          'Please analyze a photo first before creating a proposal.'
+        );
+        return;
+      }
+
+      await this.bot.sendMessage(
+        chatId,
+        '🔄 Retrying proposal creation...'
+      );
+
+      // Simulate callback query for retry
+      const fakeQuery: any = {
+        id: Date.now().toString(),
+        from: msg.from,
+        message: msg,
+        chat_instance: chatId.toString(),
+        data: 'create_proposal'
+      };
+
+      await this.handleCreateProposal(fakeQuery);
+    });
+
     // Handle /status command
-    this.bot.onText(/\/status/, (msg) => {
+    this.bot.onText(/\/status/, async (msg) => {
+      const chatId = msg.chat.id;
+      const proposalData = this.proposalDataMap.get(chatId.toString());
+
+      let statusMessage = '📊 Bot Status\n\n';
+      statusMessage += '✅ Bot is running\n';
+      statusMessage += `📋 Stored proposals: ${this.proposalDataMap.size}\n`;
+      
+      if (proposalData) {
+        statusMessage += '\n💾 Your last analysis:\n';
+        statusMessage += `📸 Image: ${proposalData.imageCID.substring(0, 20)}...\n`;
+        statusMessage += `📄 Analysis: ${proposalData.analysisCID.substring(0, 20)}...\n`;
+        statusMessage += '\n✅ Ready to create proposal!';
+      } else {
+        statusMessage += '\n📭 No analysis data stored\n';
+        statusMessage += 'Send a video to get started!';
+      }
+
+      await this.bot.sendMessage(chatId, statusMessage);
+    });
+
+    // Handle /status command (moved above, removing duplicate)
+    this.bot.onText(/\/status_old/, (msg) => {
       const chatId = msg.chat.id;
       this.bot.sendMessage(
         chatId,
@@ -266,14 +324,33 @@ export class PazeTelegramBot {
         const result = await this.analyzer.analyzePhoto(framePath);
 
         if (result.success) {
+          // Store the analysis data for proposal creation
+          const proposalData = {
+            imageUrl: result.data.imageAnalysis.storage.imageUrl,
+            analysisUrl: result.data.imageAnalysis.storage.analysisUrl,
+            imageCID: result.data.imageAnalysis.storage.imageUrl.split('/ipfs/')[1],
+            analysisCID: result.data.imageAnalysis.storage.analysisUrl.split('/ipfs/')[1]
+          };
+          
+          // Store in memory for callback
+          this.proposalDataMap.set(chatId.toString(), proposalData);
+
           await this.bot.editMessageText(
             '✅ Analysis complete!\n\n' +
             '📸 Image URL:\n' +
             `${result.data.imageAnalysis.storage.imageUrl}\n\n` +
             '📄 Analysis URL:\n' +
             `${result.data.imageAnalysis.storage.analysisUrl}\n\n` +
-            '🎯 Use these URLs for your DAO proposal!',
-            { chat_id: chatId, message_id: statusMsg.message_id }
+            '🎯 Ready to create DAO proposal!',
+            { 
+              chat_id: chatId, 
+              message_id: statusMsg.message_id,
+              reply_markup: {
+                inline_keyboard: [[
+                  { text: '🗳️ Create DAO Proposal', callback_data: 'create_proposal' }
+                ]]
+              }
+            }
           );
 
           // Cleanup frame
@@ -292,6 +369,203 @@ export class PazeTelegramBot {
           `❌ Analysis failed:\n${error.message}`
         );
       }
+    } else if (data === 'create_proposal') {
+      // Handle DAO proposal creation
+      await this.handleCreateProposal(query);
+    }
+  }
+
+  private async handleCreateProposal(query: TelegramBot.CallbackQuery) {
+    const chatId = query.message!.chat.id;
+    const proposalData = this.proposalDataMap.get(chatId.toString());
+
+    if (!proposalData) {
+      await this.bot.answerCallbackQuery(query.id, {
+        text: '❌ Proposal data not found. Please analyze a photo first.',
+        show_alert: true
+      });
+      return;
+    }
+
+    try {
+      await this.bot.answerCallbackQuery(query.id, {
+        text: '🔄 Creating DAO proposal...'
+      });
+
+      const statusMsg = await this.bot.sendMessage(
+        chatId,
+        '🗳️ Creating DAO proposal...\n\n' +
+        'This may take a few seconds...'
+      );
+
+      // Call the impact agent to create proposal
+      const { ethers } = await import('ethers');
+      
+      const contractAddress = '0x033480cD0519B7e5b2AAcd64F7B5C018FbeEC20A';
+      const contractABI = [
+        "function createProposal(string calldata description) external returns (bytes32)",
+        "event ProposalCreated(bytes32 indexed proposalId, string description, uint256 deadline)",
+        "function isMember(address account) external view returns (bool)",
+        "function joinDAO() external payable",
+        "function members(address) external view returns (bool)"
+      ];
+
+      // Fetch analysis data from IPFS
+      const axios = (await import('axios')).default;
+      const analysisResponse = await axios.get(proposalData.analysisUrl);
+      const analysisData = analysisResponse.data;
+
+      // Format proposal description
+      const location = [
+        analysisData.metadata?.location?.city,
+        analysisData.metadata?.location?.state,
+        analysisData.metadata?.location?.country
+      ].filter(Boolean).join(", ");
+
+      const submissionId = `SUB-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+
+      const description = `
+Impact Initiative Proposal
+
+Submission ID: ${submissionId}
+Location: ${location}
+Coordinates: ${analysisData.metadata?.location?.coordinates?.lat}, ${analysisData.metadata?.location?.coordinates?.lng}
+Impact Score: ${analysisData.impactAssessment?.score || 'N/A'}
+Urgency: ${analysisData.impactAssessment?.urgency || 'N/A'}
+Category: ${analysisData.impactAssessment?.category || 'N/A'}
+
+Description:
+${analysisData.analysis?.description || 'No description available'}
+
+Current Conditions:
+- Weather: ${analysisData.context?.weather?.conditions || 'N/A'} (${analysisData.context?.weather?.temperature || 'N/A'}°C)
+
+Estimated Impact:
+${analysisData.impactAssessment?.estimatedImpact || 'To be assessed by DAO members'}
+
+Recommended Actions:
+${(analysisData.impactAssessment?.recommendedActions || []).map((action: string) => `- ${action}`).join('\n')}
+
+Evidence & Verification:
+- Image IPFS: ${proposalData.imageUrl}
+- Analysis IPFS: ${proposalData.analysisUrl}
+- Confidence Score: ${analysisData.analysis?.confidence || 'N/A'}%
+- Timestamp: ${analysisData.metadata?.timestamp || new Date().toISOString()}
+
+This proposal has been automatically generated from verified analysis data.
+All information is stored on IPFS and can be independently verified.
+      `.trim();
+
+      // Connect to blockchain and create proposal
+      const provider = new ethers.JsonRpcProvider('https://rpc.ab.testnet.adifoundation.ai/');
+      const wallet = new ethers.Wallet(process.env.CREATE_PROPOSAL_PRIVATE_KEY!, provider);
+      const contract = new ethers.Contract(contractAddress, contractABI, wallet);
+
+      // Check if wallet is a member, if not, join automatically
+      try {
+        const isMember = await contract.isMember(wallet.address);
+        
+        if (!isMember) {
+          elizaLogger.info('Bot wallet is not a DAO member. Joining DAO...');
+          
+          await this.bot.editMessageText(
+            '🔄 Bot is not a DAO member yet...\n\n' +
+            'Joining DAO automatically...',
+            { chat_id: chatId, message_id: statusMsg.message_id }
+          );
+          
+          // Join DAO with minimum stake (0.0001 ADI)
+          const joinTx = await contract.joinDAO({ value: ethers.parseEther('0.0001') });
+          await joinTx.wait();
+          
+          elizaLogger.info('Successfully joined DAO');
+          
+          await this.bot.editMessageText(
+            '✅ Joined DAO successfully!\n\n' +
+            'Now creating proposal...',
+            { chat_id: chatId, message_id: statusMsg.message_id }
+          );
+        }
+      } catch (memberCheckError) {
+        elizaLogger.warn('Could not check membership, proceeding anyway:', memberCheckError);
+      }
+
+      elizaLogger.info('Creating proposal on chain...');
+      
+      try {
+        const tx = await contract.createProposal(description);
+        elizaLogger.info(`Transaction sent: ${tx.hash}`);
+
+        await this.bot.editMessageText(
+          '⏳ Transaction sent!\n\n' +
+          `TX Hash: ${tx.hash}\n\n` +
+          'Waiting for confirmation...',
+          { chat_id: chatId, message_id: statusMsg.message_id }
+        );
+
+        const receipt = await tx.wait();
+        elizaLogger.info(`Transaction confirmed in block ${receipt.blockNumber}`);
+
+        // Extract proposal ID from event
+        const proposalCreatedEvent = contract.interface.getEvent('ProposalCreated');
+        const event = receipt.logs.find(
+          (log: any) => log.topics[0] === proposalCreatedEvent!.topicHash
+        );
+
+        let proposalId = 'Unknown';
+        if (event) {
+          const parsedEvent = contract.interface.parseLog({
+            topics: event.topics,
+            data: event.data
+          });
+          proposalId = parsedEvent?.args?.[0] || 'Unknown';
+        }
+
+        await this.bot.editMessageText(
+          '✅ DAO Proposal Created!\n\n' +
+          `📋 Proposal ID:\n${proposalId}\n\n` +
+          `🔗 Transaction:\n${tx.hash}\n\n` +
+          `📦 Block: ${receipt.blockNumber}\n\n` +
+          '🎉 Your proposal is now live on the DAO!\n\n' +
+          '👉 View at: http://localhost:3001',
+          { chat_id: chatId, message_id: statusMsg.message_id }
+        );
+
+        // Cleanup
+        this.proposalDataMap.delete(chatId.toString());
+
+      } catch (txError: any) {
+        // Handle specific transaction errors
+        elizaLogger.error('Transaction error:', txError);
+        
+        let errorMessage = 'Failed to create proposal';
+        if (txError.message?.includes('Proposal already exists')) {
+          errorMessage = 'This proposal already exists. Each proposal must be unique.';
+        } else if (txError.code === 'CALL_EXCEPTION') {
+          errorMessage = 'Transaction failed. Possible reasons:\n- Proposal is not unique\n- Network congestion\n- Wait a few seconds and try again';
+        } else {
+          errorMessage = txError.message || 'Unknown error occurred';
+        }
+        
+        throw new Error(errorMessage);
+      }
+
+    } catch (error: any) {
+      elizaLogger.error('Error creating proposal:', error);
+      await this.bot.sendMessage(
+        chatId,
+        `❌ Failed to create proposal:\n${error.message}\n\n` +
+        '💡 You can try again using:\n' +
+        '• Click the button below\n' +
+        '• Send /retry command',
+        {
+          reply_markup: {
+            inline_keyboard: [[
+              { text: '🔄 Retry Proposal Creation', callback_data: 'create_proposal' }
+            ]]
+          }
+        }
+      );
     }
   }
 
@@ -331,8 +605,8 @@ export class PazeTelegramBot {
     return new Promise((resolve, reject) => {
       const outputDir = path.join(this.tempDir, `frames-${Date.now()}`);
       
-      // Python script is in parent directory's video-analyst folder
-      const scriptPath = path.join(__dirname, '../src/video-analyst/video-frame-extractor.py');
+      // Python script is in the same directory as bot.ts
+      const scriptPath = path.join(__dirname, 'video-frame-extractor.py');
       
       const args = [
         scriptPath,

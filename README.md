@@ -1,44 +1,96 @@
-# 🚀 TARS DAO - Decentralized Autonomous Organization
+# 🌍 PAZE - Decentralized Social Impact Platform
 
-A fully TypeScript-based DAO built on ADI Testnet for community-driven cause funding and governance.
+PAZE is a blockchain-based decentralized autonomous organization (DAO) that enables community-driven decision-making for social impact initiatives. Built on the ADI Testnet, PAZE combines AI-powered analysis with prediction markets to create transparent, verifiable proposals for addressing real-world issues.
 
-## ✨ Features
+## 🎯 Overview
 
-- **Dual Role System**: Join as Verifier (stake 0.1 ADI) or Agent (no stake)
-- **Cause Creation**: Submit causes with image verification
-- **Verification System**: Requires 3 verifier approvals before voting
-- **Token-Weighted Voting**: Vote with TARS governance tokens
-- **Automated Execution**: Execute approved causes after voting period
-- **Full TypeScript**: Type-safe smart contract interactions
+PAZE transforms social impact initiatives through:
 
-## 📁 Project Structure
+- **AI-Powered Analysis**: Automated analysis of photos and data to identify community issues
+- **Decentralized Governance**: Community members vote on proposals using blockchain technology
+- **Prediction Markets**: Market-based mechanisms to forecast proposal outcomes
+- **IPFS Storage**: Decentralized storage of evidence and analysis data
+- **Transparent Execution**: On-chain verification of all decisions and actions
 
-```
-doa_adi/
-├── contracts/          # Solidity smart contracts
-├── scripts/           # TypeScript deployment scripts
-├── test/              # TypeScript contract tests
-├── typechain-types/   # Generated TypeScript types
-└── frontend/          # Next.js 14 + TypeScript
-    ├── app/           # App router pages
-    ├── components/    # React components
-    └── lib/           # Contract ABI and config
-```
+## ✨ Key Features
 
-## 🛠️ Prerequisites
+### 🗳️ DAO Governance
+- Stake-based membership (0.0001 ADI minimum)
+- Democratic voting on proposals (7-day voting period)
+- Quorum requirements for proposal execution
+- Pre-configured member support
 
-- Node.js 18+
+### 📊 Proposal System
+- Rich metadata including location, severity, and issue type
+- IPFS-backed evidence storage
+- Automated proposal creation from AI analysis
+- Status tracking (Active, Executed, Rejected, Expired)
+
+### 🔮 Prediction Markets
+- Market-based outcome forecasting
+- Escrow system for market funds
+- Verification and resolution mechanisms
+- Integration with DAO proposals
+
+### 🤖 AI Integration
+- Automated photo analysis
+- Impact assessment scoring
+- Confidence-based verification
+- Telegram bot integration for data collection
+
+## 🏗️ Architecture
+
+### Smart Contracts
+
+#### SimpleDAO.sol
+Basic DAO implementation with:
+- Member management (join/leave)
+- Proposal creation and voting
+- Execution logic with quorum requirements
+
+#### PredictionMarketDAO.sol
+Advanced DAO with prediction market integration:
+- Enhanced metadata (location, severity, issue type)
+- Configurable voting and resolution periods
+- Market contract integration
+- Comprehensive proposal tracking
+
+#### MarketEscrow.sol
+Escrow system for prediction markets:
+- Secure fund management
+- Automated payouts
+- Market resolution support
+
+### Frontend Stack
+
+- **Framework**: Next.js 14 with React 18
+- **Blockchain**: ethers.js v6, wagmi, viem
+- **Wallet**: RainbowKit for wallet connections
+- **Styling**: Tailwind CSS with custom dark theme
+- **State**: TanStack React Query
+
+### Backend Services
+
+- **AI Agent**: Automated proposal creation from analysis files
+- **Telegram Bot**: Data collection and community engagement
+- **IPFS Integration**: Pinata for decentralized storage
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ and npm
 - MetaMask or compatible Web3 wallet
-- ADI testnet tokens (minimum 0.1 ADI to join as verifier)
+- ADI Testnet tokens (for gas and staking)
 
-## 🚀 Quick Start
-
-### 1. Install Dependencies
+### Installation
 
 ```bash
+# Clone the repository
+git clone <repository-url>
 cd doa_adi
 
-# Install Hardhat dependencies
+# Install dependencies
 npm install
 
 # Install frontend dependencies
@@ -47,177 +99,282 @@ npm install
 cd ..
 ```
 
-### 2. Configure Environment
+### Configuration
+
+Create a `.env` file in the root directory:
 
 ```bash
-# Copy example env file
-cp .env.example .env
+# Network Configuration
+DAO_CHAIN_RPC_URL=https://rpc.ab.testnet.adifoundation.ai/
+DAO_CHAIN_ID=99999
 
-# Edit .env and add:
-# - PRIVATE_KEY: Your wallet private key (for deployment)
-# - ADI_TESTNET_RPC: ADI testnet RPC URL
-# - CHAIN_ID: ADI testnet chain ID
+# Contract Addresses
+DAO_CONTRACT_ADDRESS=0x033480cD0519B7e5b2AAcd64F7B5C018FbeEC20A
+
+# Deployment Wallet
+CREATE_PROPOSAL_PRIVATE_KEY=your_private_key_here
+
+# Pinata (IPFS)
+PINATA_JWT=your_pinata_jwt
+PINATA_API_KEY=your_api_key
+PINATA_API_SECRET=your_api_secret
 ```
 
-### 3. Update Network Configuration
+### Running the Application
 
-Edit `hardhat.config.ts` and update:
-- ADI testnet RPC URL
-- Chain ID
-- Gas settings (if needed)
-
-Edit `frontend/app/providers.tsx` and update:
-- ADI testnet chain ID (line 11)
-- RPC URL (line 16)
-- Block explorer URL (line 19)
-- WalletConnect Project ID (line 25) - Get from https://cloud.walletconnect.com
-
-### 4. Compile Contracts
-
-```bash
-npm run compile
-```
-
-This generates TypeScript types in `typechain-types/`
-
-### 5. Run Tests
-
-```bash
-npm run test
-```
-
-### 6. Deploy to ADI Testnet
-
-```bash
-# Ensure you have ADI testnet tokens
-npm run deploy
-```
-
-After deployment:
-1. Copy the contract address
-2. Update `frontend/lib/contract.ts` - Set `CONTRACT_ADDRESS`
-3. Update `.env` - Set `NEXT_PUBLIC_CONTRACT_ADDRESS`
-
-### 7. Run Frontend
+#### Start the Frontend
 
 ```bash
 npm run dev
 ```
 
-Visit http://localhost:3000
+Visit http://localhost:3000 to access the PAZE interface.
 
-## 📖 How to Use
-
-### Join the DAO
-
-1. **Connect Wallet**: Click "Connect Wallet" button
-2. **Choose Role**:
-   - **Verifier**: Stake 0.1 ADI → Receive 100 TARS tokens
-   - **Agent**: No stake → Receive 50 TARS tokens
-3. **Confirm Transaction**
-
-### Create a Cause
-
-1. Must be a Verifier or Agent
-2. Fill in:
-   - Image hash/identifier
-   - Description
-   - Requested amount (in ADI)
-   - Beneficiary address
-3. Submit transaction
-4. Note the Cause ID from transaction logs
-
-### Verify a Cause
-
-1. Must be a Verifier
-2. Enter Cause ID
-3. Select "Verify Cause"
-4. Submit transaction
-5. Needs 3 verifications to proceed to voting
-
-### Vote on a Cause
-
-1. Must be Verifier or Agent
-2. Enter Cause ID
-3. Select "Vote Yes" or "Vote No"
-4. Voting power = your TARS token balance
-5. Voting period: 3 days
-
-### Execute a Cause
-
-1. Anyone can execute after voting ends
-2. Requirements:
-   - 3+ verifications
-   - More approval than disapproval votes
-   - Sufficient DAO balance
-3. Funds sent to beneficiary automatically
-
-## 📊 Contract Details
-
-- **Token**: TARS (ERC20 governance token)
-- **Minimum Stake**: 0.1 ADI (for verifiers)
-- **Verification Threshold**: 3 verifiers
-- **Voting Period**: 3 days (259,200 seconds)
-- **Initial Supply**: 1,000,000 TARS
-
-## 🔒 Security Features
-
-- ReentrancyGuard on fund transfers
-- Role-based access control (AccessControl)
-- Time-locked voting periods
-- Verification requirements before voting
-- Token-weighted voting system
-
-## 🧪 Development
-
-### Run Local Hardhat Node
+#### Run the Impact Agent
 
 ```bash
-npx hardhat node
+npm run impact-agent
 ```
 
-### Deploy to Local Network
+The agent will:
+1. Scan `details/analysis/` for new analysis files
+2. Upload evidence to IPFS via Pinata
+3. Create proposals on-chain
+4. Track processed files in `processed-files.json`
 
-```bash
-npx hardhat run scripts/deploy.ts --network localhost
-```
-
-### Run Tests with Coverage
-
-```bash
-npx hardhat coverage
-```
-
-### Generate TypeScript Types
+#### Deploy Contracts
 
 ```bash
 npm run compile
+npm run deploy
 ```
 
-Types are generated in `typechain-types/`
+## 📱 Using PAZE
 
-## 🌐 Get ADI Testnet Tokens
+### Joining the DAO
 
-Visit the ADI testnet faucet:
-- https://faucet-testnet.adi.network (update with actual URL)
+1. Connect your wallet to the PAZE frontend
+2. Navigate to the "Home" tab
+3. Click "Join DAO" and stake 0.0001 ADI
+4. Confirm the transaction in your wallet
 
-## 🐛 Troubleshooting
+### Creating Proposals
 
-### "Insufficient stake" error
-- Ensure you're sending at least 0.1 ADI when joining as verifier
+#### Via AI Agent
 
-### "Not authorized" error
-- You must join the DAO first (as Verifier or Agent)
+1. Add analysis JSON files to `details/analysis/`
+2. Run `npm run impact-agent`
+3. Proposals are automatically created with IPFS links
 
-### Transaction fails
-- Check you have enough ADI for gas fees
-- Verify contract address is correct in `frontend/lib/contract.ts`
-- Ensure you're connected to ADI testnet
+#### Manual Creation
 
-### TypeScript errors
-- Run `npm run compile` to regenerate types
-- Check `typechain-types/` directory exists
+Use the smart contract directly or through the frontend interface (coming soon).
 
-## 📝 License
+### Voting on Proposals
 
-MIT
+1. Navigate to the "Voting" tab
+2. Browse active proposals
+3. Click "Vote For" or "Vote Against"
+4. Confirm the transaction
+5. Wait for the 7-day voting period to end
+
+### Executing Proposals
+
+1. After voting ends, check if the proposal passed
+2. Click "Execute Proposal" if approved
+3. The proposal status updates to "Executed"
+
+## 🎨 UI/UX
+
+### Dark Theme Design
+
+PAZE features a professional dark theme inspired by modern social platforms:
+
+- **Background**: `#0f1419` (dark blue-black)
+- **Sidebar**: `#16181c` (slightly lighter)
+- **Cards**: `#16181c` with `#2f3336` borders
+- **Text**: `#e7e9ea` (primary), `#71767b` (secondary)
+- **Accent**: `#1d9bf0` (blue)
+
+### Navigation
+
+- **Sidebar**: Home and Voting tabs with network info
+- **Main Content**: Sticky header with wallet connection
+- **Responsive**: Optimized for desktop, tablet, and mobile
+
+### Proposal Cards
+
+Each proposal displays:
+- Status badge (Active, Executed, etc.)
+- Urgency level (High, Medium, Low)
+- Location and category
+- Impact score
+- Voting progress bar
+- IPFS link to full analysis
+- Expandable details
+
+## 🔧 Development
+
+### Project Structure
+
+```
+doa_adi/
+├── contracts/              # Solidity smart contracts
+│   ├── SimpleDAO.sol
+│   ├── PredictionMarketDAO.sol
+│   ├── MarketEscrow.sol
+│   └── ...
+├── frontend/               # Next.js frontend
+│   ├── app/
+│   ├── components/
+│   └── lib/
+├── scripts/                # Deployment and utility scripts
+├── src/                    # Backend services
+│   ├── social-impact/      # AI agent
+│   └── run-impact-agent.ts
+├── details/                # Analysis data
+│   ├── analysis/           # JSON analysis files
+│   └── photos/             # Original photos
+├── test/                   # Contract tests
+└── tg_analysis/            # Telegram bot
+
+```
+
+### Available Scripts
+
+```bash
+# Compile contracts
+npm run compile
+
+# Run tests
+npm run test
+
+# Deploy to ADI Testnet
+npm run deploy
+
+# Start frontend development server
+npm run dev
+
+# Build frontend for production
+npm run build
+
+# Run impact agent
+npm run impact-agent
+
+# Check membership status
+npm run check-membership
+```
+
+### Testing
+
+```bash
+# Run all tests
+npm run test
+
+# Test specific contract
+npx hardhat test test/TarsDAO.test.ts
+```
+
+## 🌐 Network Information
+
+### ADI Testnet
+
+- **Chain ID**: 99999
+- **RPC URL**: https://rpc.ab.testnet.adifoundation.ai/
+- **Explorer**: https://explorer.ab.testnet.adifoundation.ai/
+- **Faucet**: (Contact ADI team for testnet tokens)
+
+### Deployed Contracts
+
+- **PredictionMarketDAO**: `0x033480cD0519B7e5b2AAcd64F7B5C018FbeEC20A`
+- **Network**: ADI Testnet (Chain ID: 99999)
+
+## 📚 Documentation
+
+Additional documentation available in the repository:
+
+- `IMPACT_AGENT_README.md` - AI agent setup and usage
+- `PAZE_REBRANDING.md` - UI/UX design details
+- `PREDICTION_MARKET_COMPLETE.md` - Prediction market integration
+- `TESTING_GUIDE.md` - Comprehensive testing guide
+- `DEPLOYMENT_COMPLETE.md` - Deployment instructions
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these guidelines:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Write or update tests
+5. Submit a pull request
+
+## 📄 License
+
+MIT License - see LICENSE file for details
+
+## 🔗 Links
+
+- **Frontend**: http://localhost:3000 (local development)
+- **Block Explorer**: https://explorer.ab.testnet.adifoundation.ai/
+- **IPFS Gateway**: https://gateway.pinata.cloud/ipfs/
+
+## 💡 Use Cases
+
+### Community Infrastructure
+- Report and track infrastructure issues
+- Vote on repair priorities
+- Verify completion through prediction markets
+
+### Environmental Monitoring
+- Document environmental concerns
+- Coordinate community responses
+- Track impact over time
+
+### Social Impact Initiatives
+- Propose community programs
+- Allocate resources democratically
+- Measure outcomes transparently
+
+## 🛠️ Troubleshooting
+
+### Common Issues
+
+**"Not a member" error**
+- Solution: Join the DAO first by staking 0.0001 ADI
+
+**"Insufficient funds" error**
+- Solution: Ensure you have enough ADI for gas fees and staking
+
+**"Voting period ended" error**
+- Solution: You can only vote during the 7-day voting period
+
+**Frontend not connecting to wallet**
+- Solution: Ensure MetaMask is installed and connected to ADI Testnet
+
+### Getting Help
+
+- Check existing documentation in the repository
+- Review contract events on the block explorer
+- Verify your `.env` configuration
+- Ensure you're connected to the correct network
+
+## 🎯 Roadmap
+
+- [ ] Mobile app development
+- [ ] Enhanced prediction market features
+- [ ] Multi-chain deployment
+- [ ] Advanced analytics dashboard
+- [ ] Community reputation system
+- [ ] Automated impact verification
+- [ ] Integration with more AI models
+
+## 👥 Team
+
+PAZE is built by a community of developers, designers, and social impact enthusiasts committed to making decentralized governance accessible and effective.
+
+---
+
+**Built with ❤️ for social impact**
+
+*Empowering communities through decentralized decision-making*
