@@ -1,0 +1,31 @@
+{
+  "contract": "0x21C986a1C0e8658D9C5efe4bFcd9A120e49bedaB",
+  "network": "ADI Testnet",
+  "chainId": 99999,
+  "retrievedAt": "2026-02-21T16:32:28.602Z",
+  "totalProposals": 2,
+  "proposals": [
+    {
+      "id": "0x6545f1d3d21957c680260ae2fe08ac0e0c91f523f35ceb51864bb30fe562d116",
+      "description": "Denver Sidewalk Repair Initiative\n\nLocation: Denver, Colorado, United States\nCoordinates: 39.7392, -104.9903\nCategory: Infrastructure\nUrgency: High\nImpact Score: 75/100\n\nCritical sidewalk damage affecting pedestrian safety. Multiple concrete tiles are cracked and lifted, creating trip hazards for over 5,000 daily pedestrians including elderly and disabled residents.\n\nRequested Funding: 5 ADI\nEvidence: https://gateway.pinata.cloud/ipfs/QmR1d8Pymt6ukiAZydPnM67Zp7gWWo3aKUNPvcgEJHXRXp\nConfidence: 85%\nPowered by 0G Compute & Storage\n\nSubmitted: 2026-02-21T16:31:07.692Z",
+      "forVotes": "0",
+      "againstVotes": "0",
+      "deadline": "2026-02-28T16:31:09.000Z",
+      "executed": false,
+      "exists": true,
+      "blockNumber": 42601,
+      "txHash": "0xea608a23ab49172ac82aa8ca6fcdf13699f28fb1d9f01e6af66301de3ff741c4"
+    },
+    {
+      "id": "0xa2ab6ca0708c027c73a239854e6b702e64c950156a83f20a1c52a77d66080de7",
+      "description": "Boston Pothole Emergency Repair\n\nLocation: Boston, Massachusetts, United States\nCoordinates: 42.3601, -71.0589\nCategory: Infrastructure\nUrgency: High\nImpact Score: 82/100\n\nLarge pothole (2ft diameter, 6in deep) on Commonwealth Avenue near Boston University causing vehicle damage and safety hazards. Affects 10,000+ daily vehicles with multiple reports of tire damage.\n\nRequested Funding: 3 ADI\nEvidence: https://gateway.pinata.cloud/ipfs/QmNqhHbzGmhEuEXNSMvcT68KNdN8SmGhfHBiuCJvayiDuh\nConfidence: 90%\nPowered by 0G Compute & Storage\n\nSubmitted: 2026-02-21T16:31:14.958Z",
+      "forVotes": "0",
+      "againstVotes": "0",
+      "deadline": "2026-02-28T16:31:17.000Z",
+      "executed": false,
+      "exists": true,
+      "blockNumber": 42603,
+      "txHash": "0x54ab42e2a749adff22465fa487e222df83184883ea0362d3a82d1cb7da9d5713"
+    }
+  ]
+}

@@ -1,8 +1,21 @@
 {
-  "contractAddress": "0x033480cD0519B7e5b2AAcd64F7B5C018FbeEC20A",
+  "contractAddress": "0x21C986a1C0e8658D9C5efe4bFcd9A120e49bedaB",
   "deployer": "0x2B650F7565629b54fc476152e4aCbD9C1A4DEF9B",
   "network": "adiTestnet",
   "chainId": "99999",
-  "deployedAt": "2026-02-21T13:55:00.000Z",
-  "blockNumber": "latest"
+  "deployedAt": "2026-02-21T16:31:18.851Z",
+  "proposals": [
+    {
+      "id": "0x6545f1d3d21957c680260ae2fe08ac0e0c91f523f35ceb51864bb30fe562d116",
+      "title": "Denver Sidewalk Repair",
+      "ipfs": "QmR1d8Pymt6ukiAZydPnM67Zp7gWWo3aKUNPvcgEJHXRXp",
+      "txHash": "0xea608a23ab49172ac82aa8ca6fcdf13699f28fb1d9f01e6af66301de3ff741c4"
+    },
+    {
+      "id": "0xa2ab6ca0708c027c73a239854e6b702e64c950156a83f20a1c52a77d66080de7",
+      "title": "Boston Pothole Repair",
+      "ipfs": "QmNqhHbzGmhEuEXNSMvcT68KNdN8SmGhfHBiuCJvayiDuh",
+      "txHash": "0x54ab42e2a749adff22465fa487e222df83184883ea0362d3a82d1cb7da9d5713"
+    }
+  ]
 }
