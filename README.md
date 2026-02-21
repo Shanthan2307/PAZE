@@ -4,6 +4,57 @@ PAZE is a blockchain-based decentralized autonomous organization (DAO) that enab
 
 ## 🎯 Overview
 
+[User / Reporter]
+      |
+      | (1. Report via Telegram Bot)
+      v
+[Telegram Bot Interface]
+  - Photo/Video + Voice/Text Note
+  - GPS / Timestamp auto-capture
+      |
+      | (2. Media Upload & Trigger)
+      v
+[AI Analysis & Orchestration Agents]
+  - Issue Classification (damage type, severity)
+  - Context Enrichment (location, weather, news)
+      |
+      | (3. Verifiable Compute Request)
+      v
+[ZeroG Network]
+  ├── ZeroG Storage (DA) ── Decentralized media & metadata storage
+  └── ZeroG Compute ── GPU marketplace for AI inference
+                         └─ ZKML / OPML Proof Generation (authenticity, tamper detection)
+                                 |
+                                 | (4. Proof & Result Bridge)
+                                 v
+[Cross-Chain Bridge / Oracle]
+  - Chainlink CCIP or LayerZero
+  - Transfers verified result + proof to ADI Chain
+      |
+      v
+[ADI Chain (Primary Execution Layer)]
+  ├── DAO Governance Contracts
+  │    - Proposal Auto-Creation
+  │    - Community Voting
+  │    - Treasury Management (bounties, agent payments)
+  │    - Role-based Access / Multisig (institutional compliance)
+  ├── Prediction Market Contracts
+  │    - Market Launch (post-proposal)
+  │    - Binary/Scalar Bets on Timeline ("Fixed by date?")
+  │    - Oracle Resolution (via ZeroG proof or city API)
+  │    - Token Stakes & Payouts
+  └── On-Chain Tracking & Notifications
+      - Status updates to user (via bot / dashboard)
+      |
+      | (5. Resolution Feedback Loop)
+      v
+[Real-World Resolution]
+  - City Department Action (manual or API)
+  - Private Bounty / Contractor (if DAO-funded)
+  - Market Settlement → Rewards / Slashing
+      |
+      ^ (6. Feedback to improve AI / DAO)
+
 PAZE transforms social impact initiatives through:
 
 - **AI-Powered Analysis**: Automated analysis of photos and data to identify community issues
