@@ -6,11 +6,12 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import JoinDAO from '../components/JoinDAO';
 import ProposalList from '../components/ProposalList';
 import PredictionMarketsList from '../components/PredictionMarketsList';
+import CreateProposalForm from '../components/CreateProposalForm';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const { address, isConnected } = useAccount();
-  const [activeTab, setActiveTab] = useState<'home' | 'voting' | 'markets'>('voting');
+  const [activeTab, setActiveTab] = useState<'home' | 'voting' | 'proposals' | 'markets'>('voting');
 
   useEffect(() => {
     setMounted(true);
@@ -69,6 +70,20 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
               <span className="font-medium">Voting (DAO)</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('proposals')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left ${
+                activeTab === 'proposals'
+                  ? 'bg-blue-600 text-white'
+                  : 'text-blue-300 hover:bg-[#243447]'
+              }`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              <span className="font-medium">Create Proposals</span>
             </button>
 
             <button
@@ -202,6 +217,15 @@ export default function Home() {
                   </div>
 
                   <ProposalList />
+                </div>
+              )}
+
+              {activeTab === 'proposals' && (
+                <div className="max-w-4xl mx-auto">
+                  <CreateProposalForm onSuccess={() => {
+                    // Optionally switch to voting tab after success
+                    setTimeout(() => setActiveTab('voting'), 3000);
+                  }} />
                 </div>
               )}
 
